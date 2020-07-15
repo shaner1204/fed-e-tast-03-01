@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+        // 创建 vue 实例
+        let vm = new Vue ()
+        // vm 内部是一个对象的形象，属性是事件的名称，值是事件处理函数（多个处理函数应为数组 [] 形式）
+        // { 'click': [fn1, fn2], 'change': []}
+
+        // 注册事件（订阅消息）
+        vm.$on('dataChange', () => {
+            console.log('dataChange')
+        })
+        vm.$on('dataChange', () => {
+            console.log('dataChange2')
+        })
+
+        // 触发事件（发布消息）
+        // $emit 会通过事件名称到对象中找对应的属性，获取对应的事件处理函数，依次执行事件处理函数
+        vm.$emit('dataChange')
+    </script>
+</body>
+</html>
