@@ -1,1 +1,5 @@
 # fed-e-tast-03-01
+
+#### 一、简答题
+##### 1、不是响应式数据。所有的操作都是在创建 VUE 对象时做的，在 VUE 的构造函数中会创建一个 Observer 对象，在 Observer 对象中会将 data 中的所有成员转换为响应式数据，这个操作是在 new Vue 的时候完成的，当 Vue 实例化完成之后，再在下面创建一个属性，此时只是给 vm 上增加了一个普通 JS 属性，所以不是响应式。可通过 Vue.set 给根对象的下一级属性增加一个响应式的数据[Vue.set(object, propertyName, value)]，例如：Vue.set(vm.someObject, 'b', 2)通过 Vue.set 给Vue 对象的下一级属性增加一个响应式的数据 b，值是 2，此时 b 是响应式的，Vue.set 内部只是调用了 Object.defineProperty() 方法把属性转换成 getter 和 setter。除了可用 Vue.set 访问静态方法，还可用 this.$set(this.someObject, 'b', 2) 访问实例的方法
+##### 2、diff 的过程就是调用名为 patch 的函数，patch(oldVnode, newVnode)它有两个参数新旧两个节点，打补丁——把新节点中变化的内容渲染到真实 DOM，最后返回新节点作为下一次处理的旧节点。首先要先对比新旧 VNode 是否是相同节点（节点的 key 和 sel 相同）key 是节点的唯一值，sel 是节点的选择器；如果不是相同节点，就不需要比较，直接删除之前的内容，重新渲染；如果是相同节点，需判断新的 VNode 是否有 text 属性，如果有并且和 oldVnode 的 text 不同，说明 text 内容发生了变化，就直接更新文本内容；如果新的 VNode 有 children 属性，需判断子节点是否有变化。

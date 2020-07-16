@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>defineProperty 多个成员</title>
+</head>
+<body>
+    <div id='app'>
+        hello
+    </div>
+    <script>
+        // 模拟 VUE 中的 data 选项
+        let data = {
+            msg: 'hello',
+            count: 10
+        }
+
+        // 模拟 Vue 的实例
+        let vm = {}
+
+        proxyData(data)
+
+        function proxyData(data) {
+            // 遍历 data 对象的所有属性
+            Object.keys(data).forEach(key => {
+                // 把 data 中的属性，转换成 vm 的 setter/getter 
+                Object.defineProperty(vm, key, {
+                    // 可枚举（可遍历）
+                    enumerable: true,
+                    // 可配置（可以使用 delete 删除，可以通过 defineProperty 重新定义）
+                    configurable: true,
+                    // 当获取值的时候执行
+                    get () {
+                        console.log('get:', key, data[key])
+                        // 访问数据，数据还是在 data 中存储
+                        return data[key]
+                    },
+                    // 当设置值的时候执行
+                    set (newValue) {
+                        console.log('set:', newValue)
+                        if (newValue === data[key]) {
+                            return
+                        }
+                        data[key] = newValue
+                        // 数据更改，更新 DOM 的值
+                        document.querySelector('#app').textContent = data.msg
+                    }
+                })
+            })
+        }
+
+        // 数据劫持：当访问或者设置 vm 中的成员的时候，做一些干预操作
+        // defineProperty 有三个参数：1、对象；2、给 vm 增加的一个属性；3、属性描述符（可以给 msg 属性设置 get(访问 msg)、set(设置 msg) 方法）
+        
+
+        // 测试
+        vm.msg = 'hello world'
+        console.log(vm.msg)
+    </script>
+</body>
+</html>
